@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Activity, ArrowLeft } from 'lucide-react';
+import { ThemeToggle } from '@/components/theme-toggle';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 
@@ -83,14 +84,17 @@ export default function CaretakerSignup() {
   };
 
   return (
-    <div className="min-h-screen bg-black py-8 px-4">
+    <div className="min-h-screen py-8 px-4">
       <div className="container mx-auto max-w-md">
-        <Link href="/">
-          <Button variant="ghost" size="sm" className="mb-4">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
-          </Button>
-        </Link>
+        <div className="flex items-center justify-between mb-4">
+          <Link href="/">
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Home
+            </Button>
+          </Link>
+          <ThemeToggle />
+        </div>
 
         <Card>
           <CardHeader className="text-center">

@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { VitalCard } from '@/components/vital-card';
 import { VitalsChart } from '@/components/vitals-chart';
 import { Activity, Heart, Droplet, Thermometer, Wind, LogOut, Users } from 'lucide-react';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { generateRandomVitals, generateHistoricalData, VitalSignsData } from '@/lib/vital-signs';
 import {
   Select,
@@ -107,24 +108,27 @@ export default function DoctorDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-primary text-lg">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen">
       <nav className="border-b border-border bg-card/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Activity className="h-8 w-8 text-primary" />
             <span className="text-2xl font-bold">HealthComm</span>
           </div>
-          <Button variant="outline" size="sm" onClick={signOut}>
-            <LogOut className="mr-2 h-4 w-4" />
-            Logout
-          </Button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <Button variant="outline" size="sm" onClick={signOut}>
+              <LogOut className="mr-2 h-4 w-4" />
+              Logout
+            </Button>
+          </div>
         </div>
       </nav>
 

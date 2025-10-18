@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Activity, ArrowLeft } from 'lucide-react';
+import { ThemeToggle } from '@/components/theme-toggle';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 
@@ -147,14 +148,17 @@ export default function PatientSignup() {
   };
 
   return (
-    <div className="min-h-screen bg-black py-8 px-4">
+    <div className="min-h-screen py-8 px-4">
       <div className="container mx-auto max-w-2xl">
-        <Link href="/">
-          <Button variant="ghost" size="sm" className="mb-4">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
-          </Button>
-        </Link>
+        <div className="flex items-center justify-between mb-4">
+          <Link href="/">
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Home
+            </Button>
+          </Link>
+          <ThemeToggle />
+        </div>
 
         <Card>
           <CardHeader className="text-center">
