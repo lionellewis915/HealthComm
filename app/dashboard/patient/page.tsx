@@ -39,8 +39,6 @@ export default function PatientDashboard() {
   const [assignedDoctor, setAssignedDoctor] = useState<MedicalProfessional | null>(null);
   const [connectedCaretakers, setConnectedCaretakers] = useState<Caretaker[]>([]);
   const [copied, setCopied] = useState(false);
-  const [caretakerCode, setCaretakerCode] = useState('');
-  const [connecting, setConnecting] = useState(false);
   const [spikeAlert, setSpikeAlert] = useState<{ vitalName: string; value: number } | null>(null);
   const [fileRefresh, setFileRefresh] = useState(0);
 
@@ -135,51 +133,6 @@ export default function PatientDashboard() {
     }
   };
 
-  const connectCaretaker = async () => {
-    if (!caretakerCode.trim()) return;
-
-    setConnecting(true);
-    try {
-      const { data: caretaker, error: caretakerError } = await supabase
-        .from('caretakers')
-        .select('*')
-        .eq('id', caretakerCode.trim())
-        .maybeSingle();
-
-      if (caretakerError || !caretaker) {
-        toast({
-          title: 'Error',
-          description: 'Caretaker not found. Please check the code and try again.',
-          variant: 'destructive',
-        });
-        return;
-      }
-
-      const { error: connectionError } = await supabase.from('patient_connections').insert({
-        patient_id: user!.id,
-        connected_user_id: caretaker.id,
-        connection_type: 'caretaker',
-      });
-
-      if (connectionError) throw connectionError;
-
-      toast({
-        title: 'Success',
-        description: 'Caretaker connected successfully',
-      });
-
-      setCaretakerCode('');
-      loadPatientData();
-    } catch (error: any) {
-      toast({
-        title: 'Error',
-        description: error.message,
-        variant: 'destructive',
-      });
-    } finally {
-      setConnecting(false);
-    }
-  };
 
   const handleDataDeletionRequest = async () => {
     if (!user) return;
