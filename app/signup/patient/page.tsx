@@ -95,10 +95,10 @@ export default function PatientSignup() {
         if (profileError) throw profileError;
 
         let assignedDoctorId = null;
-        if (assignmentType === 'auto' && doctors.length > 0) {
-          assignedDoctorId = doctors[Math.floor(Math.random() * doctors.length)].id;
-        } else if (assignmentType === 'manual' && formData.selectedDoctorId) {
+        if (assignmentType === 'manual' && formData.selectedDoctorId) {
           assignedDoctorId = formData.selectedDoctorId;
+        } else if (doctors.length > 0) {
+          assignedDoctorId = doctors[Math.floor(Math.random() * doctors.length)].id;
         }
 
         const patientCode = generatePatientCode();

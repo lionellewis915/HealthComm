@@ -10,10 +10,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { VitalCard } from '@/components/vital-card';
 import { VitalsChart } from '@/components/vitals-chart';
-import { Activity, Heart, Droplet, Thermometer, Wind, LogOut, Copy, Check, UserPlus } from 'lucide-react';
+import { Activity, Heart, Droplet, Thermometer, Wind, LogOut, Copy, Check, UserPlus, AlertTriangle } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { generateRandomVitals, generateHistoricalData, VitalSignsData } from '@/lib/vital-signs';
+import { generateRandomVitals, generateHistoricalData, VitalSignsData, getVitalName } from '@/lib/vital-signs';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export default function PatientDashboard() {
   const { user, profile, loading, signOut } = useAuth();
@@ -27,6 +28,7 @@ export default function PatientDashboard() {
   const [copied, setCopied] = useState(false);
   const [caretakerCode, setCaretakerCode] = useState('');
   const [connecting, setConnecting] = useState(false);
+  const [spikeAlert, setSpikeAlert] = useState<{ vitalName: string; value: number } | null>(null);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -43,10 +45,26 @@ export default function PatientDashboard() {
       const newVitals = generateRandomVitals();
       setCurrentVitals(newVitals);
       setHistoricalData((prev) => [...prev.slice(-23), newVitals]);
+
+      if (newVitals.hasSpike && newVitals.spikeType) {
+        const vitalName = getVitalName(newVitals.spikeType);
+        const vitalValue = newVitals[newVitals.spikeType] as number;
+        setSpikeAlert({ vitalName, value: vitalValue });
+
+        toast({
+          title: 'Vital Sign Alert!',
+          description: `${vitalName} spike detected: ${vitalValue}`,
+          variant: 'destructive',
+        });
+
+        setTimeout(() => {
+          setSpikeAlert(null);
+        }, 10000);
+      }
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [toast]);
 
   const loadPatientData = async () => {
     if (!user) return;
@@ -189,6 +207,18 @@ export default function PatientDashboard() {
           </h1>
           <p className="text-muted-foreground">Monitor your health vitals in real-time</p>
         </div>
+
+        {spikeAlert && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Vital Sign Alert!</AlertTitle>
+            <AlertDescription>
+              {spikeAlert.vitalName} spike detected: <strong>{spikeAlert.value}</strong>
+              <br />
+              <span className="text-xs">Please consult with your doctor if this persists.</span>
+            </AlertDescription>
+          </Alert>
+        )}
 
         <div className="grid lg:grid-cols-3 gap-6 mb-8">
           <Card className="border-border">
