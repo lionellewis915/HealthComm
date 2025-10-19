@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTheme } from '@/lib/theme-provider';
 
 interface VitalsChartProps {
@@ -43,13 +43,7 @@ export function VitalsChart({ title, data, dataKey = 'value', color = '#22c55e',
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={250}>
-          <AreaChart data={data}>
-            <defs>
-              <linearGradient id={`gradient-${title}`} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={color} stopOpacity={isDark ? 0.3 : 0.2} />
-                <stop offset="95%" stopColor={color} stopOpacity={isDark ? 0.05 : 0.02} />
-              </linearGradient>
-            </defs>
+          <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#333' : '#e0e0e0'} />
             <XAxis
               dataKey="time"
@@ -69,15 +63,14 @@ export function VitalsChart({ title, data, dataKey = 'value', color = '#22c55e',
                 color: isDark ? '#fff' : '#000',
               }}
             />
-            <Area
+            <Line
               type="monotone"
               dataKey={dataKey}
               stroke={color}
               strokeWidth={2}
-              fill={`url(#gradient-${title})`}
               dot={{ fill: color, r: 3 }}
             />
-          </AreaChart>
+          </LineChart>
         </ResponsiveContainer>
       </CardContent>
     </Card>
