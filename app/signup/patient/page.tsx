@@ -189,8 +189,9 @@ export default function PatientSignup() {
                     onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                   />
                 </div>
+              </div>
 
-                <div className="space-y-2">
+              <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
@@ -199,7 +200,6 @@ export default function PatientSignup() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 />
-              </div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4">
