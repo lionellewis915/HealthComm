@@ -16,6 +16,7 @@ import { generateRandomVitals, generateHistoricalData, VitalSignsData, getVitalN
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { PatientFilesList } from '@/components/patient-files-list';
+import { FileUploadDialog } from '@/components/file-upload-dialog';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -41,6 +42,7 @@ export default function PatientDashboard() {
   const [caretakerCode, setCaretakerCode] = useState('');
   const [connecting, setConnecting] = useState(false);
   const [spikeAlert, setSpikeAlert] = useState<{ vitalName: string; value: number } | null>(null);
+  const [fileRefresh, setFileRefresh] = useState(0);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -397,11 +399,19 @@ export default function PatientDashboard() {
         {patientData && (
           <Card className="border-border mb-8">
             <CardHeader>
-              <CardTitle>My Medical Files</CardTitle>
-              <CardDescription>View your medical records and prescriptions</CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>My Medical Files</CardTitle>
+                  <CardDescription>View your medical records and prescriptions</CardDescription>
+                </div>
+                <FileUploadDialog
+                  patientId={patientData.id}
+                  onUploadComplete={() => setFileRefresh(prev => prev + 1)}
+                />
+              </div>
             </CardHeader>
             <CardContent>
-              <PatientFilesList patientId={patientData.id} canDelete={false} />
+              <PatientFilesList patientId={patientData.id} canDelete={false} refreshTrigger={fileRefresh} />
             </CardContent>
           </Card>
         )}
