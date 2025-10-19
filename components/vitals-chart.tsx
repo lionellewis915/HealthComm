@@ -12,11 +12,29 @@ interface VitalsChartProps {
   }>;
   dataKey?: string;
   color?: string;
+  domain?: [number, number];
 }
 
-export function VitalsChart({ title, data, dataKey = 'value', color = '#0ea5e9' }: VitalsChartProps) {
+export function VitalsChart({ title, data, dataKey = 'value', color = '#0ea5e9', domain }: VitalsChartProps) {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+
+  const calculateDomain = (): [number, number] | undefined => {
+    if (domain) return domain;
+
+    if (data.length === 0) return undefined;
+
+    const values = data.map(d => d.value);
+    const minValue = Math.min(...values);
+    const maxValue = Math.max(...values);
+    const range = maxValue - minValue;
+    const padding = Math.max(range * 0.3, 5);
+
+    return [
+      Math.floor(minValue - padding),
+      Math.ceil(maxValue + padding)
+    ];
+  };
 
   return (
     <Card className="border-border">
@@ -35,6 +53,7 @@ export function VitalsChart({ title, data, dataKey = 'value', color = '#0ea5e9' 
             <YAxis
               stroke={isDark ? '#888' : '#666'}
               style={{ fontSize: '12px' }}
+              domain={calculateDomain()}
             />
             <Tooltip
               contentStyle={{
