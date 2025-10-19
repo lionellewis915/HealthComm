@@ -235,12 +235,33 @@ export default function PatientDashboard() {
             </CardHeader>
             <CardContent>
               {assignedDoctor ? (
-                <div className="space-y-2 text-sm">
-                  <div className="font-medium text-lg">
-                    Dr. {assignedDoctor.first_name} {assignedDoctor.last_name}
+                <div className="space-y-3 text-sm">
+                  <div>
+                    <div className="font-medium text-lg mb-1">
+                      Dr. {assignedDoctor.first_name} {assignedDoctor.last_name}
+                    </div>
+                    <div className="text-muted-foreground">{assignedDoctor.profession}</div>
                   </div>
-                  <div className="text-muted-foreground">{assignedDoctor.specialization}</div>
-                  <div className="text-muted-foreground">{assignedDoctor.phone_number}</div>
+                  <div>
+                    <span className="text-muted-foreground">Specialization:</span>
+                    <div className="font-medium">{assignedDoctor.specialization}</div>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Qualification:</span>
+                    <div className="font-medium">{assignedDoctor.qualification}</div>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Experience:</span>
+                    <div className="font-medium">{assignedDoctor.years_of_experience} years</div>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">License:</span>
+                    <div className="font-medium text-xs">{assignedDoctor.license_number}</div>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Contact:</span>
+                    <div className="font-medium">{assignedDoctor.phone_number}</div>
+                  </div>
                 </div>
               ) : (
                 <p className="text-muted-foreground text-sm">No doctor assigned</p>

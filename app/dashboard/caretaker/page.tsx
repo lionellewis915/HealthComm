@@ -293,18 +293,54 @@ export default function CaretakerDashboard() {
 
         {selectedPatient ? (
           <>
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h2 className="text-2xl font-bold">
-                    {selectedPatient.first_name} {selectedPatient.last_name}
-                  </h2>
-                  <p className="text-muted-foreground text-sm">
-                    Patient Code: {selectedPatient.patient_code} | Blood Type: {selectedPatient.blood_type}
-                    {selectedPatient.allergies && ` | Allergies: ${selectedPatient.allergies}`}
-                  </p>
+            <Card className="border-border mb-6">
+              <CardHeader>
+                <CardTitle>Patient Information</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-3 text-sm">
+                    <div>
+                      <div className="font-medium text-lg mb-1">
+                        {selectedPatient.first_name} {selectedPatient.last_name}
+                      </div>
+                      <div className="text-muted-foreground">{selectedPatient.gender}</div>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Patient Code:</span>
+                      <div className="font-medium font-mono">{selectedPatient.patient_code}</div>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Date of Birth:</span>
+                      <div className="font-medium">{new Date(selectedPatient.date_of_birth).toLocaleDateString()}</div>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Blood Type:</span>
+                      <div className="font-medium">{selectedPatient.blood_type}</div>
+                    </div>
+                  </div>
+                  <div className="space-y-3 text-sm">
+                    <div>
+                      <span className="text-muted-foreground">Phone Number:</span>
+                      <div className="font-medium">{selectedPatient.phone_number}</div>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Next of Kin:</span>
+                      <div className="font-medium">{selectedPatient.next_of_kin}</div>
+                    </div>
+                    {selectedPatient.allergies && (
+                      <div>
+                        <span className="text-muted-foreground">Allergies:</span>
+                        <div className="font-medium text-red-600 dark:text-red-400">{selectedPatient.allergies}</div>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              </CardContent>
+            </Card>
+
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold mb-4">Current Vital Signs</h2>
 
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 <VitalCard
