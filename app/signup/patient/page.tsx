@@ -23,6 +23,7 @@ export default function PatientSignup() {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
+    email: '',
     gender: '',
     dateOfBirth: '',
     phoneNumber: '',
@@ -87,7 +88,7 @@ export default function PatientSignup() {
       if (authData.user) {
         const { error: profileError } = await supabase.from('user_profiles').insert({
           id: authData.user.id,
-          email,
+          email: formData.email,
           role: 'patient',
         });
 
