@@ -77,10 +77,8 @@ export default function PatientSignup() {
     setLoading(true);
 
     try {
-      const email = `${formData.firstName.toLowerCase()}.${formData.lastName.toLowerCase()}@gmail.com`;
-
       const { data: authData, error: authError } = await supabase.auth.signUp({
-        email,
+        email: formData.email,
         password: formData.password,
       });
 
