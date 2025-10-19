@@ -10,11 +10,23 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { VitalCard } from '@/components/vital-card';
 import { VitalsChart } from '@/components/vitals-chart';
-import { Activity, Heart, Droplet, Thermometer, Wind, LogOut, Copy, Check, UserPlus, AlertTriangle } from 'lucide-react';
+import { Activity, Heart, Droplet, Thermometer, Wind, LogOut, Copy, Check, UserPlus, AlertTriangle, Trash2 } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { generateRandomVitals, generateHistoricalData, VitalSignsData, getVitalName } from '@/lib/vital-signs';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { PatientFilesList } from '@/components/patient-files-list';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 export default function PatientDashboard() {
   const { user, profile, loading, signOut } = useAuth();
@@ -167,6 +179,30 @@ export default function PatientDashboard() {
     }
   };
 
+  const handleDataDeletionRequest = async () => {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase.from('data_deletion_requests').insert({
+        patient_id: user.id,
+        reason: 'Patient requested data deletion',
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: 'Request Submitted',
+        description: 'Your data deletion request has been submitted and will be reviewed by your healthcare provider.',
+      });
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to submit deletion request',
+        variant: 'destructive',
+      });
+    }
+  };
+
   const formatChartData = (data: VitalSignsData[], key: keyof VitalSignsData) => {
     return data.map((item) => ({
       time: new Date(item.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
@@ -201,11 +237,37 @@ export default function PatientDashboard() {
       </nav>
 
       <main className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">
-            Welcome, {patientData?.first_name} {patientData?.last_name}
-          </h1>
-          <p className="text-muted-foreground">Monitor your health vitals in real-time</p>
+        <div className="mb-6">
+          <div className="flex items-start justify-between mb-2">
+            <div>
+              <h1 className="text-3xl font-bold mb-2">
+                Welcome, {patientData?.first_name} {patientData?.last_name}
+              </h1>
+              <p className="text-muted-foreground">Monitor your health vitals in real-time</p>
+            </div>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm">
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Request Data Deletion
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Request Data Deletion</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will submit a request to delete all your personal health data. Your healthcare provider will review this request. This action cannot be undone once approved.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDataDeletionRequest} className="bg-destructive hover:bg-destructive/90">
+                    Submit Request
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </div>
 
         {spikeAlert && (
@@ -331,6 +393,18 @@ export default function PatientDashboard() {
             </CardContent>
           </Card>
         </div>
+
+        {patientData && (
+          <Card className="border-border mb-8">
+            <CardHeader>
+              <CardTitle>My Medical Files</CardTitle>
+              <CardDescription>View your medical records and prescriptions</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <PatientFilesList patientId={patientData.id} canDelete={false} />
+            </CardContent>
+          </Card>
+        )}
 
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-4">Current Vital Signs</h2>

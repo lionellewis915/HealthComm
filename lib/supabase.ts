@@ -46,6 +46,7 @@ export interface Patient {
   allergies: string;
   patient_code: string;
   assigned_doctor_id: string | null;
+  primary_caregiver_id: string | null;
   created_at: string;
 }
 
@@ -68,4 +69,26 @@ export interface VitalSigns {
   temperature: number | null;
   recorded_at: string;
   created_at: string;
+}
+
+export interface PatientFile {
+  id: string;
+  patient_id: string;
+  uploaded_by: string;
+  file_name: string;
+  file_type: string;
+  file_url: string;
+  file_size: number;
+  description: string | null;
+  created_at: string;
+}
+
+export interface DataDeletionRequest {
+  id: string;
+  patient_id: string;
+  status: 'pending' | 'approved' | 'completed' | 'rejected';
+  reason: string | null;
+  requested_at: string;
+  processed_at: string | null;
+  processed_by: string | null;
 }

@@ -10,10 +10,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { VitalCard } from '@/components/vital-card';
 import { VitalsChart } from '@/components/vitals-chart';
-import { Activity, Heart, Droplet, Thermometer, Wind, LogOut, UserPlus, Users } from 'lucide-react';
+import { Activity, Heart, Droplet, Thermometer, Wind, LogOut, UserPlus, Users, AlertTriangle } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { generateRandomVitals, generateHistoricalData, VitalSignsData } from '@/lib/vital-signs';
+import { generateRandomVitals, generateHistoricalData, VitalSignsData, getVitalName } from '@/lib/vital-signs';
 import { useToast } from '@/hooks/use-toast';
+import { PatientFilesList } from '@/components/patient-files-list';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   Select,
   SelectContent,
@@ -42,6 +44,7 @@ export default function CaretakerDashboard() {
   const [patientCode, setPatientCode] = useState('');
   const [connecting, setConnecting] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [spikeAlert, setSpikeAlert] = useState<{ vitalName: string; value: number; patientName: string } | null>(null);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -60,10 +63,28 @@ export default function CaretakerDashboard() {
       const newVitals = generateRandomVitals();
       setCurrentVitals(newVitals);
       setHistoricalData((prev) => [...prev.slice(-23), newVitals]);
+
+      if (newVitals.hasSpike && newVitals.spikeType) {
+        const vitalName = getVitalName(newVitals.spikeType);
+        const vitalValue = newVitals[newVitals.spikeType] as number;
+        const patientName = `${selectedPatient.first_name} ${selectedPatient.last_name}`;
+
+        setSpikeAlert({ vitalName, value: vitalValue, patientName });
+
+        toast({
+          title: 'Patient Vital Alert!',
+          description: `${patientName}: ${vitalName} spike detected - ${vitalValue}`,
+          variant: 'destructive',
+        });
+
+        setTimeout(() => {
+          setSpikeAlert(null);
+        }, 15000);
+      }
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [selectedPatient]);
+  }, [selectedPatient, toast]);
 
   const loadCaretakerData = async () => {
     if (!user) return;
@@ -291,6 +312,18 @@ export default function CaretakerDashboard() {
           </Card>
         </div>
 
+        {spikeAlert && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Vital Sign Alert for {spikeAlert.patientName}!</AlertTitle>
+            <AlertDescription>
+              {spikeAlert.vitalName} spike detected: <strong>{spikeAlert.value}</strong>
+              <br />
+              <span className="text-xs">Please check on the patient immediately.</span>
+            </AlertDescription>
+          </Alert>
+        )}
+
         {selectedPatient ? (
           <>
             <Card className="border-border mb-6">
@@ -336,6 +369,16 @@ export default function CaretakerDashboard() {
                     )}
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border mb-6">
+              <CardHeader>
+                <CardTitle>Patient Medical Files</CardTitle>
+                <CardDescription>View patient medical records and prescriptions</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <PatientFilesList patientId={selectedPatient.id} canDelete={false} />
               </CardContent>
             </Card>
 

@@ -11,6 +11,8 @@ import { VitalsChart } from '@/components/vitals-chart';
 import { Activity, Heart, Droplet, Thermometer, Wind, LogOut, Users } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { generateRandomVitals, generateHistoricalData, VitalSignsData } from '@/lib/vital-signs';
+import { FileUploadDialog } from '@/components/file-upload-dialog';
+import { PatientFilesList } from '@/components/patient-files-list';
 import {
   Select,
   SelectContent,
@@ -27,6 +29,7 @@ export default function DoctorDashboard() {
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [currentVitals, setCurrentVitals] = useState<VitalSignsData>(generateRandomVitals());
   const [historicalData, setHistoricalData] = useState<VitalSignsData[]>(generateHistoricalData(24));
+  const [fileRefresh, setFileRefresh] = useState(0);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -227,6 +230,26 @@ export default function DoctorDashboard() {
                     )}
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border mb-6">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle>Patient Files</CardTitle>
+                  <FileUploadDialog
+                    patientId={selectedPatient.id}
+                    onUploadComplete={() => setFileRefresh(prev => prev + 1)}
+                  />
+                </div>
+                <CardDescription>Medical records, prescriptions, and documents</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <PatientFilesList
+                  patientId={selectedPatient.id}
+                  canDelete={true}
+                  refreshTrigger={fileRefresh}
+                />
               </CardContent>
             </Card>
 
