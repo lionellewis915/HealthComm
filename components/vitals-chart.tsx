@@ -15,7 +15,7 @@ interface VitalsChartProps {
   domain?: [number, number];
 }
 
-export function VitalsChart({ title, data, dataKey = 'value', color = '#0ea5e9', domain }: VitalsChartProps) {
+export function VitalsChart({ title, data, dataKey = 'value', color = '#22c55e', domain }: VitalsChartProps) {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
 
