@@ -34,23 +34,37 @@ export function FileUploadDialog({ patientId, onUploadComplete }: FileUploadDial
   const [open, setOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [description, setDescription] = useState('');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { toast } = useToast();
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!selectedFile) {
+      toast({
+        title: 'No file selected',
+        description: 'Please select a file to upload',
+        variant: 'destructive',
+      });
+      return;
+    }
 
     setUploading(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
-      const fileExt = file.name.split('.').pop();
+      const fileExt = selectedFile.name.split('.').pop();
       const fileName = `${patientId}/${Date.now()}.${fileExt}`;
 
       const { error: uploadError, data } = await supabase.storage
         .from('patient-files')
-        .upload(fileName, file);
+        .upload(fileName, selectedFile);
 
       if (uploadError) throw uploadError;
 
@@ -61,10 +75,10 @@ export function FileUploadDialog({ patientId, onUploadComplete }: FileUploadDial
       const { error: dbError } = await supabase.from('patient_files').insert({
         patient_id: patientId,
         uploaded_by: user.id,
-        file_name: file.name,
-        file_type: file.type,
+        file_name: selectedFile.name,
+        file_type: selectedFile.type,
         file_url: publicUrl,
-        file_size: file.size,
+        file_size: selectedFile.size,
         description: description.trim() || null,
       });
 
@@ -77,6 +91,7 @@ export function FileUploadDialog({ patientId, onUploadComplete }: FileUploadDial
 
       setOpen(false);
       setDescription('');
+      setSelectedFile(null);
       if (onUploadComplete) onUploadComplete();
     } catch (error: any) {
       toast({
@@ -113,6 +128,7 @@ export function FileUploadDialog({ patientId, onUploadComplete }: FileUploadDial
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
+              disabled={uploading}
             />
           </div>
           <div className="space-y-2">
@@ -120,17 +136,27 @@ export function FileUploadDialog({ patientId, onUploadComplete }: FileUploadDial
             <Input
               id="file"
               type="file"
-              onChange={handleFileUpload}
+              onChange={handleFileSelect}
               disabled={uploading}
               accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
             />
+            {selectedFile && (
+              <p className="text-sm text-foreground">
+                Selected: {selectedFile.name} ({(selectedFile.size / 1024).toFixed(1)} KB)
+              </p>
+            )}
             <p className="text-xs text-muted-foreground">
               Accepted formats: PDF, JPG, PNG, DOC, DOCX (Max 10MB)
             </p>
           </div>
-          {uploading && (
-            <p className="text-sm text-muted-foreground">Uploading...</p>
-          )}
+          <Button
+            onClick={handleUpload}
+            disabled={!selectedFile || uploading}
+            className="w-full"
+          >
+            <Upload className="mr-2 h-4 w-4" />
+            {uploading ? 'Uploading...' : 'Upload File'}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

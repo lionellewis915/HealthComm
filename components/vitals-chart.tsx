@@ -46,8 +46,8 @@ export function VitalsChart({ title, data, dataKey = 'value', color = '#22c55e',
           <AreaChart data={data}>
             <defs>
               <linearGradient id={`gradient-${title}`} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={color} stopOpacity={isDark ? 0.3 : 0.4} />
-                <stop offset="95%" stopColor={color} stopOpacity={isDark ? 0.05 : 0.1} />
+                <stop offset="5%" stopColor={color} stopOpacity={isDark ? 0.3 : 0.2} />
+                <stop offset="95%" stopColor={color} stopOpacity={isDark ? 0.05 : 0.02} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#333' : '#e0e0e0'} />
