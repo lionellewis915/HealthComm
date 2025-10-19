@@ -1,0 +1,16 @@
+{
+  "projectName": "HealthComm",
+  "description": "Patient health monitoring and communication platform",
+  "framework": "Next.js",
+  "database": "Supabase",
+  "features": [
+    "Patient dashboard with vital signs monitoring",
+    "Doctor dashboard for patient management",
+    "Caretaker dashboard for connected patients",
+    "Email authentication for all user types",
+    "Patient code system for easy connections",
+    "File upload and management",
+    "Real-time vital sign alerts",
+    "Data deletion request system"
+  ]
+}

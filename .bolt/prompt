@@ -1,0 +1,45 @@
+Create a comprehensive patient health monitoring and communication platform called HealthComm with the following features:
+
+1. Three user roles:
+   - Patients: Can view their vital signs, connect with caretakers, upload medical files, and request data deletion
+   - Doctors (Medical Professionals): Can view assigned patients, monitor vital signs, upload files, and manage alerts
+   - Caretakers: Can connect to patients using patient codes and monitor their health data
+
+2. Authentication:
+   - Email and password authentication for all user types
+   - Role-based access control
+   - Secure signup and login flows
+
+3. Patient Features:
+   - Unique patient code for easy caretaker connections
+   - Dashboard showing vital signs (heart rate, blood pressure, oxygen, glucose, temperature)
+   - Charts displaying vital sign trends
+   - View connected caretakers and assigned doctor
+   - File upload and management
+   - Data deletion request capability
+
+4. Doctor Features:
+   - View all assigned patients
+   - Monitor patient vital signs with real-time charts
+   - View and acknowledge critical alerts
+   - Upload patient files
+   - View patient information and history
+
+5. Caretaker Features:
+   - Connect to patients using patient codes
+   - View connected patients' vital signs
+   - Monitor health alerts
+   - View patient files
+
+6. Database:
+   - Use Supabase for authentication and data storage
+   - Tables: user_profiles, medical_professionals, patients, caretakers, patient_connections, vital_signs, vital_alerts, patient_files, data_deletion_requests
+   - Comprehensive Row Level Security (RLS) policies
+   - Supabase Storage for file uploads
+
+7. Design:
+   - Modern, clean UI with dark mode support
+   - Responsive design for all screen sizes
+   - Professional healthcare-focused aesthetic
+   - Intuitive navigation and user experience
+   - Real-time data visualization with charts
