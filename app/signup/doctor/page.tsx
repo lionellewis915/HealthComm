@@ -30,6 +30,7 @@ export default function DoctorSignup() {
     yearsOfExperience: '',
     email: '',
     phoneNumber: '',
+    hospital: '',
     password: '',
     confirmPassword: '',
   });
@@ -69,6 +70,7 @@ export default function DoctorSignup() {
           id: authData.user.id,
           first_name: formData.firstName,
           last_name: formData.lastName,
+          email: formData.email,
           gender: formData.gender,
           date_of_birth: formData.dateOfBirth,
           profession: formData.profession,
@@ -78,6 +80,7 @@ export default function DoctorSignup() {
           qualification: formData.qualification,
           years_of_experience: parseInt(formData.yearsOfExperience),
           phone_number: formData.phoneNumber,
+          hospital: formData.hospital,
           is_available_for_assignment: true,
         });
 
@@ -259,6 +262,17 @@ export default function DoctorSignup() {
                   required
                   value={formData.phoneNumber}
                   onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="hospital">Hospital / Medical Facility</Label>
+                <Input
+                  id="hospital"
+                  placeholder="e.g., Kingston Public Hospital"
+                  required
+                  value={formData.hospital}
+                  onChange={(e) => setFormData({ ...formData, hospital: e.target.value })}
                 />
               </div>
 

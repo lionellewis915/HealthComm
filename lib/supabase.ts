@@ -19,6 +19,7 @@ export interface MedicalProfessional {
   id: string;
   first_name: string;
   last_name: string;
+  email: string | null;
   gender: string;
   date_of_birth: string;
   profession: string;
@@ -28,6 +29,7 @@ export interface MedicalProfessional {
   qualification: string;
   years_of_experience: number;
   phone_number: string;
+  hospital: string | null;
   is_available_for_assignment: boolean;
   created_at: string;
 }

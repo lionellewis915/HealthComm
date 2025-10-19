@@ -242,6 +242,12 @@ export default function PatientDashboard() {
                     </div>
                     <div className="text-muted-foreground">{assignedDoctor.profession}</div>
                   </div>
+                  {assignedDoctor.email && (
+                    <div>
+                      <span className="text-muted-foreground">Email:</span>
+                      <div className="font-medium text-xs break-all">{assignedDoctor.email}</div>
+                    </div>
+                  )}
                   <div>
                     <span className="text-muted-foreground">Specialization:</span>
                     <div className="font-medium">{assignedDoctor.specialization}</div>
@@ -258,8 +264,14 @@ export default function PatientDashboard() {
                     <span className="text-muted-foreground">License:</span>
                     <div className="font-medium text-xs">{assignedDoctor.license_number}</div>
                   </div>
+                  {assignedDoctor.hospital && (
+                    <div>
+                      <span className="text-muted-foreground">Hospital:</span>
+                      <div className="font-medium">{assignedDoctor.hospital}</div>
+                    </div>
+                  )}
                   <div>
-                    <span className="text-muted-foreground">Contact:</span>
+                    <span className="text-muted-foreground">Phone:</span>
                     <div className="font-medium">{assignedDoctor.phone_number}</div>
                   </div>
                 </div>
