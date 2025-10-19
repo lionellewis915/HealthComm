@@ -235,44 +235,44 @@ export default function PatientDashboard() {
             </CardHeader>
             <CardContent>
               {assignedDoctor ? (
-                <div className="space-y-3 text-sm">
+                <div className="space-y-2 text-sm">
                   <div>
-                    <div className="font-medium text-lg mb-1">
+                    <div className="font-semibold text-base">
                       Dr. {assignedDoctor.first_name} {assignedDoctor.last_name}
                     </div>
-                    <div className="text-muted-foreground">{assignedDoctor.profession}</div>
+                    <div className="text-muted-foreground text-xs">{assignedDoctor.specialization}</div>
                   </div>
-                  {assignedDoctor.email && (
-                    <div>
-                      <span className="text-muted-foreground">Email:</span>
-                      <div className="font-medium text-xs break-all">{assignedDoctor.email}</div>
+                  <div className="pt-1 space-y-1.5">
+                    {assignedDoctor.hospital && (
+                      <div className="flex justify-between items-start gap-2">
+                        <span className="text-muted-foreground text-xs">Hospital:</span>
+                        <span className="font-medium text-xs text-right flex-1">{assignedDoctor.hospital}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between items-start gap-2">
+                      <span className="text-muted-foreground text-xs">Qualification:</span>
+                      <span className="font-medium text-xs">{assignedDoctor.qualification}</span>
                     </div>
-                  )}
-                  <div>
-                    <span className="text-muted-foreground">Specialization:</span>
-                    <div className="font-medium">{assignedDoctor.specialization}</div>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">Qualification:</span>
-                    <div className="font-medium">{assignedDoctor.qualification}</div>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">Experience:</span>
-                    <div className="font-medium">{assignedDoctor.years_of_experience} years</div>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">License:</span>
-                    <div className="font-medium text-xs">{assignedDoctor.license_number}</div>
-                  </div>
-                  {assignedDoctor.hospital && (
-                    <div>
-                      <span className="text-muted-foreground">Hospital:</span>
-                      <div className="font-medium">{assignedDoctor.hospital}</div>
+                    <div className="flex justify-between items-start gap-2">
+                      <span className="text-muted-foreground text-xs">Experience:</span>
+                      <span className="font-medium text-xs">{assignedDoctor.years_of_experience} years</span>
                     </div>
-                  )}
-                  <div>
-                    <span className="text-muted-foreground">Phone:</span>
-                    <div className="font-medium">{assignedDoctor.phone_number}</div>
+                    <div className="flex justify-between items-start gap-2">
+                      <span className="text-muted-foreground text-xs">License:</span>
+                      <span className="font-medium text-xs">{assignedDoctor.license_number}</span>
+                    </div>
+                    <div className="border-t border-border pt-1.5 mt-2 space-y-1">
+                      {assignedDoctor.email && (
+                        <div className="flex justify-between items-start gap-2">
+                          <span className="text-muted-foreground text-xs">Email:</span>
+                          <span className="font-medium text-xs break-all text-right flex-1">{assignedDoctor.email}</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between items-start gap-2">
+                        <span className="text-muted-foreground text-xs">Phone:</span>
+                        <span className="font-medium text-xs">{assignedDoctor.phone_number}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ) : (
